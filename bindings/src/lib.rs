@@ -1,0 +1,76 @@
+use std::fmt::Debug;
+
+uniffi::include_scaffolding!("bindings");
+// This is interesting. Because we're supposed to use setup_scaffolding!() at the top.
+// Please refer to <https://mozilla.github.io/uniffi-rs/proc_macro/index.html>
+// I found this sample at: https://github.com/MathieuTricoire/convex-rs-ffi/tree/90fb36ea3dec16b05a8e4f47aa032987b2727122
+// uniffi::setup_scaffolding!();
+
+// #[derive(Debug, thiserror::Error)]
+// enum BindingError {
+//   #[error("default binding errors")]
+//   DefaultError,
+// }
+
+#[derive(uniffi::Record, Debug)]
+pub struct GetReturn {
+  pub value: String,
+}
+
+#[uniffi::export(callback_interface)]
+pub trait GreetingDelegate: Send + Sync + Debug {
+  fn greeting_called(&self, to: String) -> GetReturn;
+}
+
+pub struct GreetingLogger {
+  delegate: Box<dyn GreetingDelegate>,
+}
+
+impl GreetingLogger {
+  pub fn new(delegate: Box<dyn GreetingDelegate>) -> Self {
+    Self { delegate }
+  }
+
+  pub fn greeting_called(&self, to: String) {
+    let val = self.delegate.greeting_called(to);
+
+    println!("val {:?}", val)
+  }
+}
+
+static LOGGER_INSTANCE: once_cell::sync::OnceCell<GreetingLogger> =
+  once_cell::sync::OnceCell::new();
+
+#[uniffi::export]
+pub fn set_logging_delegate(delegate: Box<dyn GreetingDelegate>) {
+  let logger = GreetingLogger::new(delegate);
+  let result = LOGGER_INSTANCE.set(logger);
+  if result.is_err() {
+    panic!("Logger already set");
+  }
+}
+
+#[uniffi::export]
+pub fn rust_greeting(to: String) -> String {
+  if let Some(logger) = LOGGER_INSTANCE.get() {
+    logger.greeting_called(to.clone());
+  }
+  return format!("Hello, {}!", to);
+}
+
+#[uniffi::export]
+pub fn add(a: i32, b: i32) -> i32 {
+  a + b
+}
+
+#[derive(uniffi::Record)]
+pub struct RustDemoObj {
+  pub value: i64,
+}
+
+#[uniffi::export]
+pub fn add_obj(a: &RustDemoObj, b: &RustDemoObj) -> RustDemoObj {
+  RustDemoObj {
+    value: a.value + b.value,
+  }
+}
