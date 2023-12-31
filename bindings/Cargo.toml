@@ -7,27 +7,22 @@ version = "0.1.0"
 [lib]
 crate-type = [
   "staticlib", # must for iOS
-  "rlib",
-  "cdylib",    # must for Android
+  # "cdylib",    # must for Android
 ]
 # staticlib would be good enough.
 # adding "rlib" here just in case that we need to call these public interfaces directly from another Rust crate
 name = "bindings"
 
-
 [dependencies]
-once_cell = "1.18.0"
 thiserror = "1"
 uniffi = { workspace = true }
 tokio_kcp = "0.9.6"
 tokio = { version = "1.35.1", features = [ # TODO remove unnecessary
   "rt",
   "net",
-  "macros",
   "sync",
   "rt-multi-thread",
   "io-util",
-  "time",
 ] }
 lazy_static = "1.4.0"
 kcp = "0.5.3"
@@ -40,5 +35,3 @@ uniffi = { workspace = true, features = ["build"] }
 codegen-units = 1 # Reduce number of codegen units to increase optimizations.
 lto = true        # Enable Link Time Optimization
 opt-level = 'z'   # Optimize for size.
-# panic = 'abort'     # Abort on panic
-debug = true # Enable debug symbols. For example, we can use `dwarfdump` to check crash traces.

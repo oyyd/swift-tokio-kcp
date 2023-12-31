@@ -9,8 +9,6 @@ default-members = ["bindings"]
 codegen-units = 1 # Reduce number of codegen units to increase optimizations.
 lto = true        # Enable Link Time Optimization
 opt-level = 3     # All optimizations # https://doc.rust-lang.org/cargo/reference/profiles.html#opt-level
-# panic = 'abort'     # Abort on panic
-debug = true # Enable debug symbols. For example, we can use `dwarfdump` to check crash traces.
 
 [workspace.dependencies]
 uniffi = { version = "0.25.3" }

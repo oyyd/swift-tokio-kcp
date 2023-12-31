@@ -150,7 +150,6 @@ dependencies = [
  "dashmap",
  "kcp",
  "lazy_static",
- "once_cell",
  "thiserror",
  "tokio",
  "tokio_kcp",
