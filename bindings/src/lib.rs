@@ -1,76 +1,119 @@
-use std::fmt::Debug;
-
 uniffi::include_scaffolding!("bindings");
-// This is interesting. Because we're supposed to use setup_scaffolding!() at the top.
-// Please refer to <https://mozilla.github.io/uniffi-rs/proc_macro/index.html>
-// I found this sample at: https://github.com/MathieuTricoire/convex-rs-ffi/tree/90fb36ea3dec16b05a8e4f47aa032987b2727122
-// uniffi::setup_scaffolding!();
 
-// #[derive(Debug, thiserror::Error)]
-// enum BindingError {
-//   #[error("default binding errors")]
-//   DefaultError,
-// }
+mod error;
+mod manager;
 
-#[derive(uniffi::Record, Debug)]
-pub struct GetReturn {
-  pub value: String,
-}
+use error::SwiftKcpError;
+use lazy_static::lazy_static;
+use manager::{StreamId, StreamManager};
+use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4};
+use std::str::FromStr;
+use std::sync::Arc;
+use tokio::{
+  io::{AsyncReadExt, AsyncWriteExt},
+  runtime::Runtime,
+  sync::Mutex,
+};
+use tokio_kcp::{KcpConfig, KcpStream};
 
-#[uniffi::export(callback_interface)]
-pub trait GreetingDelegate: Send + Sync + Debug {
-  fn greeting_called(&self, to: String) -> GetReturn;
-}
+type Result<T> = std::result::Result<T, error::SwiftKcpError>;
 
-pub struct GreetingLogger {
-  delegate: Box<dyn GreetingDelegate>,
-}
-
-impl GreetingLogger {
-  pub fn new(delegate: Box<dyn GreetingDelegate>) -> Self {
-    Self { delegate }
-  }
-
-  pub fn greeting_called(&self, to: String) {
-    let val = self.delegate.greeting_called(to);
-
-    println!("val {:?}", val)
-  }
-}
-
-static LOGGER_INSTANCE: once_cell::sync::OnceCell<GreetingLogger> =
-  once_cell::sync::OnceCell::new();
-
-#[uniffi::export]
-pub fn set_logging_delegate(delegate: Box<dyn GreetingDelegate>) {
-  let logger = GreetingLogger::new(delegate);
-  let result = LOGGER_INSTANCE.set(logger);
-  if result.is_err() {
-    panic!("Logger already set");
-  }
+lazy_static! {
+  static ref RUNTIME: Arc<Mutex<Option<Runtime>>> = Arc::new(Mutex::new(None));
+  static ref MANAGER: Arc<StreamManager> = Arc::new(StreamManager::new());
 }
 
 #[uniffi::export]
-pub fn rust_greeting(to: String) -> String {
-  if let Some(logger) = LOGGER_INSTANCE.get() {
-    logger.greeting_called(to.clone());
-  }
-  return format!("Hello, {}!", to);
+async fn init_runtime() -> Result<()> {
+  // TODO support parameters for runtimes
+  let rt = Runtime::new()?;
+
+  let mut runtime = RUNTIME.lock().await;
+
+  let _ = runtime.insert(rt);
+
+  Ok(())
 }
 
 #[uniffi::export]
-pub fn add(a: i32, b: i32) -> i32 {
-  a + b
-}
+async fn deinit_runtime() -> Result<()> {
+  let mut runtime = RUNTIME.lock().await;
 
-#[derive(uniffi::Record)]
-pub struct RustDemoObj {
-  pub value: i64,
+  runtime.take();
+
+  Ok(())
 }
 
 #[uniffi::export]
-pub fn add_obj(a: &RustDemoObj, b: &RustDemoObj) -> RustDemoObj {
-  RustDemoObj {
-    value: a.value + b.value,
+async fn new_stream(addr_str: String) -> Result<StreamId> {
+  let config = KcpConfig::default();
+  let addr = SocketAddr::from_str(&addr_str)?;
+
+  let join_handle = {
+    let mut rt = RUNTIME.lock().await;
+    if rt.is_none() {
+      return Err(SwiftKcpError::Default {
+        msg: "RUNTIME not inited".to_string(),
+      });
+    }
+    let rt = rt.as_mut().unwrap();
+    rt.spawn(async move {
+      let stream = KcpStream::connect(&config, addr).await;
+      // stream
+      stream
+    })
+  };
+
+  let stream = join_handle.await??;
+
+  let id = MANAGER.insert_stream(stream);
+
+  Ok(id)
+}
+
+#[uniffi::export]
+async fn remove_stream(id: StreamId) -> Result<()> {
+  let stream = MANAGER.remove_stream(id);
+
+  if stream.is_none() {
+    return Err(SwiftKcpError::Default {
+      msg: format!("stream with id: {} doesn't exit", id),
+    });
   }
+
+  Ok(())
+}
+
+#[uniffi::export]
+async fn write_stream(id: StreamId, data: Vec<u8>) -> Result<()> {
+  let mut rt = RUNTIME.lock().await;
+
+  if rt.is_none() {
+    return Err(SwiftKcpError::Default {
+      msg: "RUNTIME not inited".to_string(),
+    });
+  }
+
+  let rt = rt.as_mut().unwrap();
+
+  rt.spawn(async move {
+    let stream = MANAGER.get_mut_stream(id);
+    if stream.is_none() {
+      return Err(SwiftKcpError::Default {
+        msg: format!("no stream with id {}", id),
+      });
+    }
+    let mut stream = stream.unwrap();
+    stream.write_all(&data).await?;
+
+    Ok(())
+  })
+  .await??;
+
+  Ok(())
+}
+
+#[uniffi::export]
+async fn read_stream(id: StreamId) -> Result<Vec<u8>> {
+  Ok(vec![])
 }

@@ -19,9 +19,19 @@ name = "bindings"
 once_cell = "1.18.0"
 thiserror = "1"
 uniffi = { workspace = true }
-# uniffi_bindgen = { workspace = true }
-# uniffi_macros = { workspace = true }
-
+tokio_kcp = "0.9.6"
+tokio = { version = "1.35.1", features = [ # TODO remove unnecessary
+  "rt",
+  "net",
+  "macros",
+  "sync",
+  "rt-multi-thread",
+  "io-util",
+  "time",
+] }
+lazy_static = "1.4.0"
+kcp = "0.5.3"
+dashmap = "5.5.3"
 
 [build-dependencies]
 uniffi = { workspace = true, features = ["build"] }
