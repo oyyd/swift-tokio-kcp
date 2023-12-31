@@ -7,7 +7,7 @@ version = "0.1.0"
 [lib]
 crate-type = [
   "staticlib", # must for iOS
-  # "cdylib",    # must for Android
+  "cdylib",    # must for Android
 ]
 # staticlib would be good enough.
 # adding "rlib" here just in case that we need to call these public interfaces directly from another Rust crate
