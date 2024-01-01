@@ -16,6 +16,17 @@ public class KcpStream {
     public static func deinitTokioRuntime() async {
         await deinitRuntime()
     }
+    
+    // Get total internal stream count.
+    public static func get_count() async -> UInt32 {
+        return await getStreamCount()
+    }
+    
+    private static func beforeDeinit(streamId: UInt64) {
+        Task {
+            try await removeStream(id: streamId)
+        }
+    }
 
     private var streamId: UInt64?
     private var addr: String
@@ -28,8 +39,21 @@ public class KcpStream {
         self.addr = addr
     }
     
-    // TODO remove in deinit
+    deinit {
+        if streamId != nil {
+            let id = streamId!
+            KcpStream.beforeDeinit(streamId: id)
+        }
+    }
     
+    // i.e. setting `nodelay` true, interval 10, resend 2, nc true
+    public func setFastestConfig() {
+        config.nodelay = true
+        config.nodelayInterval = 10
+        config.nodelayResend = 2
+        config.nodelayNc = true
+    }
+        
     // Create tokio kcp stream.
     // `connect()` should be invoked only once or and error will be thrown.
     public func connect() async throws {

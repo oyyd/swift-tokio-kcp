@@ -17,6 +17,10 @@ impl StreamManager {
     }
   }
 
+  pub fn len(&self) -> usize {
+    self.stream_by_id.len()
+  }
+
   fn next_id(&self) -> StreamId {
     let id = self.id.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
     id

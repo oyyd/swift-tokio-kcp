@@ -136,3 +136,8 @@ async fn read_stream(id: StreamId) -> Result<Vec<u8>> {
 
   Ok(buf[0..n].to_vec())
 }
+
+#[uniffi::export]
+async fn get_stream_count() -> u32 {
+  MANAGER.len() as u32
+}
