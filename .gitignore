@@ -69,5 +69,5 @@ target/
 
 test.js
 output/Sources/*
-!output/Sources/Wrapper
+!output/Sources/TokioKcp
 output/.swiftpm

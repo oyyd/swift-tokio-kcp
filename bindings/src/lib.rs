@@ -37,7 +37,7 @@ async fn init_runtime() -> Result<()> {
 }
 
 #[uniffi::export]
-async fn deinit_runtime() -> Result<()> {
+async fn deinit_runtime() {
   let rt = {
     let mut runtime = RUNTIME.lock().await;
 
@@ -48,8 +48,6 @@ async fn deinit_runtime() -> Result<()> {
     rt.unwrap()
       .shutdown_timeout(std::time::Duration::from_secs(1));
   }
-
-  Ok(())
 }
 
 #[uniffi::export]
