@@ -1,5 +1,7 @@
 # SwiftTokioKcp
 
+// TODO add 9.6MB note
+
 ## Example
 
 ## Building
@@ -26,9 +28,12 @@ After finishing build, ensure all necesary files are incldued in `output` folder
 ```bash
 make move-dot-git-and-files
 cd output
+git commit -m "x.x.x"
 git tag x.x.x
 git push origin x.x.x
 ```
+
+Version tags contain only files to be , i.e. Rust project files won't be included. Therefore never commit and merge publish changes in `main` branch.
 
 ## TODO
 - doc: tips to start a server

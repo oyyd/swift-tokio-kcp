@@ -103,7 +103,7 @@ async fn write_stream(id: StreamId, data: Vec<u8>) -> Result<()> {
     if stream.is_none() {
       return Err(SwiftKcpError::NoStreamForId { id });
     }
-    let mut stream: dashmap::mapref::one::RefMut<'_, u64, KcpStream> = stream.unwrap();
+    let mut stream = stream.unwrap();
     stream.write_all(&data).await?;
 
     Ok(())
@@ -140,4 +140,82 @@ async fn read_stream(id: StreamId) -> Result<Vec<u8>> {
 #[uniffi::export]
 async fn get_stream_count() -> u32 {
   MANAGER.len() as u32
+}
+
+// Shuts down the output stream, ensuring that the value can be dropped cleanly.
+#[uniffi::export]
+async fn shutdown_stream(id: StreamId) -> Result<()> {
+  let rt = RUNTIME.read().await;
+  if rt.is_none() {
+    return Err(SwiftKcpError::RuntimeNotInited);
+  }
+  let rt = rt.as_ref().unwrap();
+
+  rt.spawn(async move {
+    let stream = MANAGER.get_mut_stream(id);
+    if stream.is_none() {
+      return Err(SwiftKcpError::NoStreamForId { id });
+    }
+
+    let mut stream = stream.unwrap();
+    stream.shutdown().await?;
+
+    Ok(())
+  })
+  .await??;
+
+  Ok(())
+}
+
+// Flushes this output stream, ensuring that all intermediately buffered contents reach their destination.
+#[uniffi::export]
+async fn flush_stream(id: StreamId) -> Result<()> {
+  let rt = RUNTIME.read().await;
+  if rt.is_none() {
+    return Err(SwiftKcpError::RuntimeNotInited);
+  }
+  let rt = rt.as_ref().unwrap();
+
+  rt.spawn(async move {
+    let stream = MANAGER.get_mut_stream(id);
+    if stream.is_none() {
+      return Err(SwiftKcpError::NoStreamForId { id });
+    }
+
+    let mut stream = stream.unwrap();
+    stream.flush().await?;
+
+    Ok(())
+  })
+  .await??;
+
+  Ok(())
+}
+
+// Reads the exact number of bytes required to fill buf.
+#[uniffi::export]
+async fn read_exact_stream(id: StreamId, len: u32) -> Result<Vec<u8>> {
+  let rt = RUNTIME.read().await;
+  if rt.is_none() {
+    return Err(SwiftKcpError::RuntimeNotInited);
+  }
+  let rt = rt.as_ref().unwrap();
+
+  let data = rt
+    .spawn(async move {
+      let stream = MANAGER.get_mut_stream(id);
+      if stream.is_none() {
+        return Err(SwiftKcpError::NoStreamForId { id });
+      }
+
+      let mut stream = stream.unwrap();
+      let mut data: Vec<u8> = vec![0; len as usize];
+
+      stream.read_exact(&mut data).await?;
+
+      Ok(data)
+    })
+    .await??;
+
+  Ok(data)
 }

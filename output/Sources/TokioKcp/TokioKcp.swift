@@ -81,4 +81,35 @@ public class KcpStream {
         
         return data
     }
+    
+    // Reads the exact number of bytes required to fill buf.
+    public func read_exec(count: UInt32) async throws -> Data {
+        if streamId == nil {
+            throw TokioKcpError.StreamNotConnect
+        }
+        
+        let data = try await readExactStream(id: streamId!, len: count)
+        
+        return data
+    }
+    
+    // Flushes this output stream, ensuring that all intermediately buffered contents reach their destination.
+    public func flush() async throws {
+        if streamId == nil {
+            throw TokioKcpError.StreamNotConnect
+        }
+        
+        
+        try await flushStream(id: streamId!)
+    }
+    
+    // Shuts down the output stream, ensuring that the value can be dropped cleanly.
+    public func shutdown() async throws {
+        if streamId == nil {
+            throw TokioKcpError.StreamNotConnect
+        }
+        
+        
+        try await shutdownStream(id: streamId!)
+    }
 }
