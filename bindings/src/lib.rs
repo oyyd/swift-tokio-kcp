@@ -14,7 +14,7 @@ use std::sync::Arc;
 use tokio::{
   io::{AsyncReadExt, AsyncWriteExt},
   runtime::Runtime,
-  sync::Mutex,
+  sync::RwLock,
 };
 use tokio_kcp::{KcpConfig, KcpStream};
 
@@ -23,14 +23,14 @@ type Result<T> = std::result::Result<T, error::SwiftKcpError>;
 const READ_BUF: usize = 65535;
 
 lazy_static! {
-  static ref RUNTIME: Arc<Mutex<Option<Runtime>>> = Arc::new(Mutex::new(None));
+  static ref RUNTIME: Arc<RwLock<Option<Runtime>>> = Arc::new(RwLock::new(None));
   static ref MANAGER: Arc<StreamManager> = Arc::new(StreamManager::new());
 }
 
 #[uniffi::export]
 async fn init_runtime() -> Result<()> {
   let rt = Runtime::new()?;
-  let mut runtime = RUNTIME.lock().await;
+  let mut runtime = RUNTIME.write().await;
   let _ = runtime.insert(rt);
 
   Ok(())
@@ -39,7 +39,7 @@ async fn init_runtime() -> Result<()> {
 #[uniffi::export]
 async fn deinit_runtime() {
   let rt = {
-    let mut runtime = RUNTIME.lock().await;
+    let mut runtime = RUNTIME.write().await;
 
     runtime.take()
   };
@@ -61,11 +61,11 @@ async fn new_stream(addr_str: String, params: KcpConfigParams) -> Result<StreamI
   let addr = SocketAddr::from_str(&addr_str)?;
 
   let join_handle = {
-    let mut rt = RUNTIME.lock().await;
+    let rt = RUNTIME.read().await;
     if rt.is_none() {
       return Err(SwiftKcpError::RuntimeNotInited);
     }
-    let rt = rt.as_mut().unwrap();
+    let rt = rt.as_ref().unwrap();
     rt.spawn(async move {
       let stream = KcpStream::connect(&config, addr).await;
       stream
@@ -92,11 +92,11 @@ async fn remove_stream(id: StreamId) -> Result<()> {
 
 #[uniffi::export]
 async fn write_stream(id: StreamId, data: Vec<u8>) -> Result<()> {
-  let mut rt = RUNTIME.lock().await;
+  let rt = RUNTIME.read().await;
   if rt.is_none() {
     return Err(SwiftKcpError::RuntimeNotInited);
   }
-  let rt = rt.as_mut().unwrap();
+  let rt = rt.as_ref().unwrap();
 
   rt.spawn(async move {
     let stream = MANAGER.get_mut_stream(id);
@@ -115,11 +115,11 @@ async fn write_stream(id: StreamId, data: Vec<u8>) -> Result<()> {
 
 #[uniffi::export]
 async fn read_stream(id: StreamId) -> Result<Vec<u8>> {
-  let mut rt = RUNTIME.lock().await;
+  let rt = RUNTIME.read().await;
   if rt.is_none() {
     return Err(SwiftKcpError::RuntimeNotInited);
   }
-  let rt = rt.as_mut().unwrap();
+  let rt = rt.as_ref().unwrap();
 
   let (n, buf) = rt
     .spawn(async move {
