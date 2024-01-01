@@ -12,7 +12,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "Bindings",
-            targets: ["Bindings", "BindingsFFI"]
+            targets: ["Bindings", "BindingsFFI", "Wrapper"]
         ),
     ],
     dependencies: [

@@ -67,6 +67,7 @@ $RECYCLE.BIN/
 
 target/
 
-output
-
 test.js
+output/Sources/*
+!output/Sources/Wrapper
+output/.swiftpm

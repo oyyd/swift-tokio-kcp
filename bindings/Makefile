@@ -7,12 +7,12 @@ apple:
 	@make build-targets
 	@make bindgen-swift
 	@make assemble-frameworks
-	@make xcframeowrk
-	@make cp-xcframeowrk-source
+	@make xcframework
+	@make cp-xcframework-source
 
 
 remove-output:
-	rm -rf ../output
+	rm -rf ../output/Sources/Bindings ../output/Sources/BindingsFFI.xcframework
 
 build-targets:
 	$(CARGO_BUILD_CMD) --lib --target x86_64-apple-ios
@@ -34,7 +34,7 @@ assemble-frameworks:
 	cd $(TARGET_DIR)/aarch64-apple-darwin/release && mkdir -p BindingsFFI.framework && cd BindingsFFI.framework && mkdir Headers Modules Resources && cp ../../../../bindings/src/BindingsFFI.modulemap ./Modules/module.modulemap && cp ../../../../bindings/src/BindingsFFI.h ./Headers/BindingsFFI.h && cp ../$(STATIC_LIB_NAME) ./BindingsFFI && cp ../../../../misc/apple/Info.plist ./Resources
 	cd $(TARGET_DIR)/x86_64-apple-darwin/release && mkdir -p BindingsFFI.framework && cd BindingsFFI.framework && mkdir Headers Modules Resources && cp ../../../../bindings/src/BindingsFFI.modulemap ./Modules/module.modulemap && cp ../../../../bindings/src/BindingsFFI.h ./Headers/BindingsFFI.h && cp ../$(STATIC_LIB_NAME) ./BindingsFFI && cp ../../../../misc/apple/Info.plist ./Resources
 
-xcframeowrk:
+xcframework:
   # lipo used to create universal(aarch64 + x86_64) files
 	lipo -create $(TARGET_DIR)/x86_64-apple-ios/release/BindingsFFI.framework/BindingsFFI \
 		$(TARGET_DIR)/aarch64-apple-ios-sim/release/BindingsFFI.framework/BindingsFFI \
@@ -51,8 +51,7 @@ xcframeowrk:
 		-framework $(TARGET_DIR)/aarch64-apple-darwin/release/BindingsFFI.framework \
 		-output $(TARGET_DIR)/BindingsFFI.xcframework
 
-cp-xcframeowrk-source:
+cp-xcframework-source:
 	mkdir -p ../output/Sources/Bindings
 	cp -r $(TARGET_DIR)/BindingsFFI.xcframework ../output/Sources
 	cp src/Bindings.swift ../output/Sources/Bindings
-	cp ../misc/apple/Package.swift ../output/
