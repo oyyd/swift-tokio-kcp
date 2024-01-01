@@ -167,7 +167,8 @@ async fn shutdown_stream(id: StreamId) -> Result<()> {
   Ok(())
 }
 
-// Flushes this output stream, ensuring that all intermediately buffered contents reach their destination.
+// Call kcp flush behind. Note that this method won't guarantee data is transfered to
+// the remove side.
 #[uniffi::export]
 async fn flush_stream(id: StreamId) -> Result<()> {
   let rt = RUNTIME.read().await;
@@ -192,7 +193,7 @@ async fn flush_stream(id: StreamId) -> Result<()> {
   Ok(())
 }
 
-// Reads the exact number of bytes required to fill buf.
+// NOTE: Empty operation.
 #[uniffi::export]
 async fn read_exact_stream(id: StreamId, len: u32) -> Result<Vec<u8>> {
   let rt = RUNTIME.read().await;

@@ -92,8 +92,9 @@ public class KcpStream {
         
         return data
     }
-    
-    // Flushes this output stream, ensuring that all intermediately buffered contents reach their destination.
+
+    // Call kcp flush behind. Note that this method won't guarantee data is transfered to
+    // the remove side.
     public func flush() async throws {
         if streamId == nil {
             throw TokioKcpError.StreamNotConnect
@@ -101,15 +102,5 @@ public class KcpStream {
         
         
         try await flushStream(id: streamId!)
-    }
-    
-    // Shuts down the output stream, ensuring that the value can be dropped cleanly.
-    public func shutdown() async throws {
-        if streamId == nil {
-            throw TokioKcpError.StreamNotConnect
-        }
-        
-        
-        try await shutdownStream(id: streamId!)
     }
 }
