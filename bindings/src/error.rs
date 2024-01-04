@@ -27,4 +27,7 @@ pub enum SwiftKcpError {
 
   #[error("Stream not found for id {id}")]
   NoStreamForId { id: u64 },
+
+  #[error("Listener not found for id {id}")]
+  NoListenerForId { id: u64 },
 }
