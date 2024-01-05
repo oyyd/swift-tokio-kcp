@@ -1,39 +1,93 @@
-# SwiftTokioKcp
+# swift-tokio-kcp
 
-// TODO add 9.6MB note
+`swift-tokio-kcp` provides [kcp](https://github.com/skywind3000/kcp) network communication to swift.
+
+Kcp is a fast and reliable ARQ protocol that targets on low latency network communication, and is expected to work more stable than TCP in network environments with a certain packet loss. `swift-tokio-kcp` is a binding of [tokio_kcp](https://github.com/Matrix-Zhang/tokio_kcp).
+
+## Features
+
+- As the core part of kcp communication is done by tokio_kcp which is a rust implementation, `swift-tokio-kcp` is expected to have **better performance**, i.e. less latency and cpu/memory consumption, than pure swift implementations.
+
+TODO 10MB/s test example.
+
+- The exported swift package contains only built libraries, therefore you don't need rust environments to use this package. See the code in tags for detail, e.g. [tag 0.1.0](https://github.com/oyyd/swift-tokio-kcp/tree/0.1.0).
+
+- Disadvantage: As the binding is shipped through `uniffi-rs` and other reasons, currently the binding has to be built as a static lib which could increase the size of your application to about `9.6MB`.
 
 ## Example
 
-## Building
+Client example:
 
-### Prerequisite
+```swift
+import TokioKcp
 
-Setup [rust](https://rustup.rs/).
+func clientExample() async throws {
+  // Initialize a tokio runtime. This should be done only once before you de-init the runtime.
+  // You can call `KcpStream.deinitTokioRuntime()` to de-init the runtime.
+  try await KcpStream.initTokioRuntime()
 
-### Build Binaries
+  // Create a kcp stream that will conncets to 127.0.0.1:3100.
+  let stream = KcpStream(addr: "127.0.0.1:3100")
+  // Set kcp conifg. You can also manually modify `stream.config` before `connect()`.
+  stream.setFastestConfig()
+  // Connect the stream.
+  try await stream.connect()
+  let dataToWrite = "Hello!".data(using: .utf8)!
+  // Write some data to the remote.
+  try await stream.write(data: dataToWrite)
+  // Read some data from the remote.
+  let data = try await stream.read()
+  print("[client] receive: \(String(data: data, encoding: .utf8)!)")
+}
+```
 
-> uniffi-rs setting up is modified from repo: https://github.com/imWildCat/uniffi-rs-fullstack-examples
+You can also start a kcp server for testing if you don't have one:
+```swift
+import TokioKcp
+
+func serverExample() async throws {
+  // Should call `KcpStream.initTokioRuntime()` if you don't have.
+
+  // Create a kcp listener that will bind to 0.0.0.0:3100.
+  let listener = KcpListener(addr: "0.0.0.0:3100")
+  // Set kcp conifg. You can also manually modify `listener.config` before `bind()`.
+  listener.setFastestConfig()
+  // Bind the listener.
+  try await listener.bind()
+
+  while true {
+    do {
+      // Accept new clients
+      let stream = try await listener.accept()
+      Task {
+        // Use the stream to write or read some data to/from the remote.
+        // ....
+      }
+    } catch {
+      print("failed to accept stream, error \(error)")
+    }
+  }
+}
+```
+
+## Build from Source
+
+Run the prepare and build scripts below:
 
 ```bash
 make prepare-apple
-cd bindings && make apple
+cd bindings
+make apple
 ```
 
-Binaries will be generated into `output` folder.
+Then the swift package is in `output` folder.
 
-## Publish Version
+## References
 
-After finishing build, ensure all necesary files are incldued in `output` folder, then:
+- [tokio_kcp](https://github.com/Matrix-Zhang/tokio_kcp/) A Kcp implementation for tokio
+- [kcp](https://github.com/skywind3000/kcp) KCP - A Fast and Reliable ARQ Protocol
+- [uniffi-rs](https://github.com/mozilla/uniffi-rs/) a multi-language bindings generator for rust
+- [uniffi-rs-fullstack-examples](https://github.com/imWildCat/uniffi-rs-fullstack-examples/) Build Rust for Android and iOS (with potential for all mobile platforms, Windows, Mac and Web*)
 
-```bash
-make move-dot-git-and-files
-cd output
-git commit -m "x.x.x"
-git tag x.x.x
-git push origin x.x.x
-```
-
-Version tags contain only files to be , i.e. Rust project files won't be included. Therefore never commit and merge publish changes in `main` branch.
-
-## TODO
-- doc: tips to start a server
+## License
+MIT
