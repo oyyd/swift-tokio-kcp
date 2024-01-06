@@ -84,6 +84,19 @@ make apple
 
 Then, the swift package can be found in the `output` folder.
 
+## Publish
+
+After build:
+
+```bash
+rm -rf output/.git
+make move-dot-git-and-files
+cd output
+git tag x.x.x
+git push origin x.x.x
+cd ../ && git clean -df
+```
+
 ## References
 
 - [tokio_kcp](https://github.com/Matrix-Zhang/tokio_kcp/) A Kcp implementation for tokio
