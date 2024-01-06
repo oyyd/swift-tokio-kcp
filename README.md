@@ -1,18 +1,18 @@
 # swift-tokio-kcp
 
-`swift-tokio-kcp` provides [kcp](https://github.com/skywind3000/kcp) network communication to swift.
+`swift-tokio-kcp` provides [kcp](https://github.com/skywind3000/kcp) network communication capabilities to swift.
 
-Kcp is a fast and reliable ARQ protocol that targets on low latency network communication, and is expected to work more stable than TCP in network environments with a certain packet loss. `swift-tokio-kcp` is a binding of [tokio_kcp](https://github.com/Matrix-Zhang/tokio_kcp).
+Kcp is a fast and reliable ARQ protocol targeting low latency network communication and is expected to work more stable than TCP in network environments with certain packet loss. `swift-tokio-kcp` is a binding of [tokio_kcp](https://github.com/Matrix-Zhang/tokio_kcp).
 
 ## Features
 
-- As the core part of kcp communication is done by tokio_kcp which is a rust implementation, `swift-tokio-kcp` is expected to have **better performance**, i.e. less latency and cpu/memory consumption, than pure swift implementations.
+- Since the core part of kcp communication is handled by tokio_kcp, which is a rust implementation, `swift-tokio-kcp` is expected to offer **better performance**, i.e. low latency and reduces cpu/memory consumption, compared to pure swift implementations.
 
 ![write_10mb_profile](./doc/write_10mb.png)
 
-- The exported swift package contains only built libraries, therefore you don't need rust environments to use this package. See the code in tags for detail, e.g. [tag 0.1.0](https://github.com/oyyd/swift-tokio-kcp/tree/0.1.0).
+- The exported swift package contains only pre-built libraries, so you don't need a rust environment to use this package. See the code in tags for detail, e.g. [tag 0.1.0](https://github.com/oyyd/swift-tokio-kcp/tree/0.1.0).
 
-- Disadvantage: As the binding is shipped through `uniffi-rs` and other reasons, currently the binding has to be built as a static lib which could increase the size of your application to about `9.6MB`.
+- Disadvantage: Since the binding is deliveried through `uniffi-rs` and other reasons, it currently has to be built as a static lib which could increase the size of your application to about `9.6MB`.
 
 ## Example
 
@@ -26,7 +26,7 @@ func clientExample() async throws {
   // You can call `KcpStream.deinitTokioRuntime()` to de-init the runtime.
   try await KcpStream.initTokioRuntime()
 
-  // Create a kcp stream that will conncets to 127.0.0.1:3100.
+  // Create a kcp stream that will conncet to 127.0.0.1:3100.
   let stream = KcpStream(addr: "127.0.0.1:3100")
   // Set kcp conifg. You can also manually modify `stream.config` before `connect()`.
   stream.setFastestConfig()
@@ -80,7 +80,7 @@ cd bindings
 make apple
 ```
 
-Then the swift package is in `output` folder.
+Then, the swift package can be found in the `output` folder.
 
 ## References
 
