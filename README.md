@@ -8,7 +8,7 @@ Kcp is a fast and reliable ARQ protocol that targets on low latency network comm
 
 - As the core part of kcp communication is done by tokio_kcp which is a rust implementation, `swift-tokio-kcp` is expected to have **better performance**, i.e. less latency and cpu/memory consumption, than pure swift implementations.
 
-TODO 10MB/s test example.
+![write_10mb_profile](./doc/write_10mb.png)
 
 - The exported swift package contains only built libraries, therefore you don't need rust environments to use this package. See the code in tags for detail, e.g. [tag 0.1.0](https://github.com/oyyd/swift-tokio-kcp/tree/0.1.0).
 
