@@ -1,5 +1,7 @@
 # swift-tokio-kcp
 
+![workflow status](https://github.com/oyyd/swift-tokio-kcp/actions/workflows/build.yml/badge.svg)
+
 `swift-tokio-kcp` provides [kcp](https://github.com/skywind3000/kcp) network communication capabilities to swift.
 
 Kcp is a fast and reliable ARQ protocol targeting low latency network communication and is expected to work more stable than TCP in network environments with certain packet loss. `swift-tokio-kcp` is a binding of [tokio_kcp](https://github.com/Matrix-Zhang/tokio_kcp).
