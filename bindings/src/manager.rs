@@ -1,18 +1,19 @@
-use dashmap::{mapref::one::RefMut, DashMap};
-use std::sync::atomic::AtomicU64;
+use std::sync::Arc;
+use std::{collections::HashMap, sync::atomic::AtomicU64};
+use tokio::sync::Mutex;
 
 pub type StreamId = u64;
 
 pub struct Manager<T> {
   id: AtomicU64,
-  item_by_id: DashMap<StreamId, T>,
+  item_by_id: HashMap<StreamId, Arc<Mutex<T>>>,
 }
 
 impl<T> Manager<T> {
   pub fn new() -> Self {
     Self {
       id: AtomicU64::new(0),
-      item_by_id: DashMap::new(),
+      item_by_id: HashMap::new(),
     }
   }
 
@@ -25,20 +26,30 @@ impl<T> Manager<T> {
     id
   }
 
-  pub fn insert_stream(&self, stream: T) -> StreamId {
+  pub fn insert_stream(&mut self, stream: T) -> StreamId {
     let id = self.next_id();
 
-    self.item_by_id.insert(id, stream);
+    self.item_by_id.insert(id, Arc::new(Mutex::new(stream)));
 
     id
   }
 
-  pub fn get_mut_stream(&self, id: StreamId) -> Option<RefMut<StreamId, T>> {
-    self.item_by_id.get_mut(&id)
+  pub fn get_mut_stream(&self, id: StreamId) -> Option<Arc<Mutex<T>>> {
+    let d = self.item_by_id.get(&id);
+
+    if d.is_none() {
+      return None;
+    }
+
+    let stream = d.unwrap();
+
+    let e = stream.clone();
+
+    Some(e)
   }
 
-  pub fn remove_stream(&self, id: StreamId) -> Option<T> {
-    self.item_by_id.remove(&id).map(|(_, stream)| stream)
+  pub fn remove_stream(&mut self, id: StreamId) -> Option<Arc<Mutex<T>>> {
+    self.item_by_id.remove(&id).map(|stream| stream)
   }
 }
 

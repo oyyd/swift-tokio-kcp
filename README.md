@@ -74,12 +74,16 @@ func serverExample() async throws {
 
 ## Build from Source
 
-Run the prepare and build scripts below:
+Install dependenceis:
 
 ```bash
 make prepare-apple
-cd bindings
-make apple
+```
+
+Build:
+
+```bash
+cargo run -p builder -- --release
 ```
 
 Then, the swift package can be found in the `output` folder.

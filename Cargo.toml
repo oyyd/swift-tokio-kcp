@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 
-members = ["bindings", "uniffi-bindgen"]
+members = ["bindings", "uniffi-bindgen", "builder"]
 
 default-members = ["bindings"]
 

@@ -71,3 +71,6 @@ test.js
 output/Sources/*
 !output/Sources/TokioKcp
 output/.swiftpm
+
+generated
+**/.build
