@@ -1,0 +1,4 @@
+module TokioKcp {
+    header "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/TokioKcp.build/TokioKcp-Swift.h"
+    requires objc
+}

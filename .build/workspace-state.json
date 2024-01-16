@@ -1,0 +1,24 @@
+{
+  "object" : {
+    "artifacts" : [
+      {
+        "kind" : "xcframework",
+        "packageRef" : {
+          "identity" : "output",
+          "kind" : "root",
+          "location" : "/Users/a/code/github/swift-tokio-kcp/output",
+          "name" : "output"
+        },
+        "path" : "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework",
+        "source" : {
+          "type" : "local"
+        },
+        "targetName" : "BindingsFFI"
+      }
+    ],
+    "dependencies" : [
+
+    ]
+  },
+  "version" : 6
+}

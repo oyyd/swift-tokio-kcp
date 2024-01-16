@@ -1,0 +1,340 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+    "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/BindingsFFI.framework" : {
+      "inputs" : [
+        {
+          "kind" : "directory",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework/macos-arm64_x86_64/BindingsFFI.framework"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "directory",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/BindingsFFI.framework"
+        }
+      ]
+    }
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.Bindings-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "importPath" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/Sources/Bindings/Bindings.swift"
+        },
+        {
+          "kind" : "directory",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/BindingsFFI.framework"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "Bindings",
+      "moduleOutputPath" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/Bindings.swiftmodule",
+      "objects" : [
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/Bindings.build/Bindings.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx11.0",
+        "-swift-version",
+        "5",
+        "-enable-batch-mode",
+        "-index-store-path",
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-g",
+        "-j14",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-I",
+        "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework/macos-arm64_x86_64",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework/macos-arm64_x86_64",
+        "-module-cache-path",
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-F",
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/Bindings.build/Bindings-Swift.h",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC"
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/Bindings.build/Bindings.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/Bindings.swiftmodule"
+        }
+      ],
+      "sources" : [
+        "/Users/a/code/github/swift-tokio-kcp/output/Sources/Bindings/Bindings.swift"
+      ],
+      "tempsPath" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/Bindings.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.TokioKcp-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "importPath" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/Sources/TokioKcp/TokioKcp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/Bindings.swiftmodule"
+        },
+        {
+          "kind" : "directory",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/BindingsFFI.framework"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "TokioKcp",
+      "moduleOutputPath" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/TokioKcp.swiftmodule",
+      "objects" : [
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/TokioKcp.build/TokioKcp.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx11.0",
+        "-swift-version",
+        "5",
+        "-enable-batch-mode",
+        "-index-store-path",
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-g",
+        "-j14",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-I",
+        "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework/macos-arm64_x86_64",
+        "-Xcc",
+        "-I",
+        "-Xcc",
+        "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework/macos-arm64_x86_64",
+        "-module-cache-path",
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-F",
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/TokioKcp.build/TokioKcp-Swift.h",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-fPIC"
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/TokioKcp.build/TokioKcp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/TokioKcp.swiftmodule"
+        }
+      ],
+      "sources" : [
+        "/Users/a/code/github/swift-tokio-kcp/output/Sources/TokioKcp/TokioKcp.swift"
+      ],
+      "tempsPath" : "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/TokioKcp.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "Bindings" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "Bindings",
+      "-incremental",
+      "-c",
+      "/Users/a/code/github/swift-tokio-kcp/output/Sources/Bindings/Bindings.swift",
+      "-I",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug",
+      "-target",
+      "arm64-apple-macosx11.0",
+      "-swift-version",
+      "5",
+      "-enable-batch-mode",
+      "-index-store-path",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-g",
+      "-j14",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-I",
+      "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework/macos-arm64_x86_64",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework/macos-arm64_x86_64",
+      "-module-cache-path",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-F",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/Bindings.build/Bindings-Swift.h",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ],
+    "TokioKcp" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "TokioKcp",
+      "-incremental",
+      "-c",
+      "/Users/a/code/github/swift-tokio-kcp/output/Sources/TokioKcp/TokioKcp.swift",
+      "-I",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug",
+      "-target",
+      "arm64-apple-macosx11.0",
+      "-swift-version",
+      "5",
+      "-enable-batch-mode",
+      "-index-store-path",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-g",
+      "-j14",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-I",
+      "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework/macos-arm64_x86_64",
+      "-Xcc",
+      "-I",
+      "-Xcc",
+      "/Users/a/code/github/swift-tokio-kcp/output/Sources/BindingsFFI.xcframework/macos-arm64_x86_64",
+      "-module-cache-path",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-F",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/TokioKcp.build/TokioKcp-Swift.h",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-fPIC",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "Bindings" : [
+      "BindingsFFI"
+    ],
+    "TokioKcp" : [
+      "Bindings",
+      "BindingsFFI"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  }
+}

@@ -1,0 +1,4 @@
+module Bindings {
+    header "/Users/a/code/github/swift-tokio-kcp/output/.build/arm64-apple-macosx/debug/Bindings.build/Bindings-Swift.h"
+    requires objc
+}
