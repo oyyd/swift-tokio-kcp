@@ -14,8 +14,6 @@ Kcp is a fast and reliable ARQ protocol targeting low latency network communicat
 
 - The exported swift package contains only pre-built libraries, so you don't need a rust environment to use this package. See the code in tags for detail, e.g. [tag 0.1.0](https://github.com/oyyd/swift-tokio-kcp/tree/0.1.0).
 
-- Disadvantage: Since the binding is deliveried through `uniffi-rs` and other reasons, it currently has to be built as a static lib which could increase the size of your application to about `9.6MB`.
-
 ## Example
 
 Client example:
