@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.4.0
+feat: add `KcpListener.close()`
+
 ## 0.3.0
 refactor: update building method to reduce lib size
 fix: fix a possible deadlock issue

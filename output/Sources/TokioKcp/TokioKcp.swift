@@ -21,16 +21,16 @@ public class KcpStream {
     public static func initTokioRuntime() async throws {
         try await initRuntime()
     }
-    
+
     public static func deinitTokioRuntime() async {
         await deinitRuntime()
     }
-    
+
     // Get total internal stream count.
     public static func get_count() async -> UInt32 {
         return await getStreamCount()
     }
-    
+
     private static func beforeDeinit(streamId: UInt64) {
         Task {
             try await removeStream(id: streamId)
@@ -39,32 +39,32 @@ public class KcpStream {
 
     private var streamId: UInt64?
     private var addr: String
-    
+
     // Modify `config` before `connect()` or it won't affect the stream.
     public var config = defaultKcpConfigParams()
-    
+
     // `addr` is a remote ip port string, e.g. "127.0.0.1:8000".
     public init(addr: String) {
         self.addr = addr
     }
-    
+
     public init(streamId: UInt64, addr: String) {
         self.addr = addr
         self.streamId = streamId
     }
-    
+
     deinit {
         if streamId != nil {
             let id = streamId!
             KcpStream.beforeDeinit(streamId: id)
         }
     }
-    
+
     // i.e. setting `nodelay` true, interval 10, resend 2, nc true
     public func setFastestConfig() {
         modifyFastestConfig(&config)
     }
-        
+
     // Create tokio kcp stream.
     // `connect()` should be invoked only once or and error will be thrown.
     public func connect() async throws {
@@ -74,33 +74,33 @@ public class KcpStream {
 
         streamId = try await newStream(addrStr: self.addr, params: self.config)
     }
-    
+
     public func write(data: Data) async throws {
         if streamId == nil {
             throw TokioKcpError.StreamNotConnect
         }
-        
+
         try await writeStream(id: streamId!, data: data)
     }
-    
+
     public func read() async throws -> Data {
         if streamId == nil {
             throw TokioKcpError.StreamNotConnect
         }
-        
+
         let data = try await readStream(id: streamId!)
-        
+
         return data
     }
-    
+
     // Reads the exact number of bytes required to fill buf.
     public func read_exec(count: UInt32) async throws -> Data {
         if streamId == nil {
             throw TokioKcpError.StreamNotConnect
         }
-        
+
         let data = try await readExactStream(id: streamId!, len: count)
-        
+
         return data
     }
 
@@ -110,8 +110,8 @@ public class KcpStream {
         if streamId == nil {
             throw TokioKcpError.StreamNotConnect
         }
-        
-        
+
+
         try await flushStream(id: streamId!)
     }
 }
@@ -126,20 +126,20 @@ public class KcpListener {
 
     private var listenerId: UInt64?
     private var addr: String
-    
+
     // Modify `config` before `bind()` or it won't affect the stream.
     public var config = defaultKcpConfigParams()
 
     public init(addr: String) {
         self.addr = addr
     }
-    
+
     deinit {
         if listenerId != nil {
             KcpListener.beforeDeinit(listenerId: listenerId!)
         }
     }
-        
+
     // i.e. setting `nodelay` true, interval 10, resend 2, nc true
     public func setFastestConfig() {
         modifyFastestConfig(&config)
@@ -161,12 +161,12 @@ public class KcpListener {
         }
 
         let pair = try await Bindings.accepet(id: listenerId!)
-        
+
         let stream = KcpStream(streamId: pair.id, addr: pair.addr)
-        
+
         return stream
     }
-    
+
     // Get bind address.
     public func localAddr() async throws -> String {
         if listenerId == nil {
@@ -176,5 +176,10 @@ public class KcpListener {
         let addr = try await Bindings.localAddr(id: listenerId!)
         return addr
     }
-}
 
+    public func close() async throws {
+        if listenerId != nil {
+            try await removeListener(id: self.listenerId!)
+        }
+    }
+}
