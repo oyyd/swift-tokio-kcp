@@ -59,6 +59,10 @@ public class KcpStream {
             KcpStream.beforeDeinit(streamId: id)
         }
     }
+    
+    public func getAddr() -> String {
+        return self.addr
+    }
 
     // i.e. setting `nodelay` true, interval 10, resend 2, nc true
     public func setFastestConfig() {

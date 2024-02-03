@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.5.0
+feat: add `KcpStream.getAddr()`
+
 ## 0.4.0
 feat: add `KcpListener.close()`
 

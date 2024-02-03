@@ -96,7 +96,7 @@ make move-dot-git-and-files
 cd output
 git add -A && git commit -m "release x.x.x"
 git tag x.x.x && git push origin x.x.x
-cd ../ && git clean -df
+cd ../ && rm -rf output/.git && git clean -df
 ```
 
 ## References
